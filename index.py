@@ -1,26 +1,257 @@
 import customtkinter as ctk
 
 
-def button_callback():
-    print("button clicked")
+def apenas_texto(valor):
+    if valor == "":
+        return True
 
-    print(nome)
+    return valor.replace(" ", "").isalpha()
 
+
+def apenas_numero(valor):
+    if valor == "":
+        return True
+
+    return valor.isdigit()
+
+
+def validar_valor(valor):
+    if valor == "":
+        return True
+
+    valor = valor.replace(",", ".")
+
+    try:
+        float(valor)
+        return True
+    except ValueError:
+        return False
+
+
+def Button():
+    fornecedor = InputFornecedor.get()
+    nf = InputNF.get()
+    valor = InputValor.get()
+
+    print("Fornecedor:", fornecedor)
+    print("NF:", nf)
+    print("Valor:", valor)
+
+
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
-ctk.set_appearance_mode("system")
-app.geometry("800x600")
+app.geometry("900x600")
+app.title("Controle de Notas Fiscais")
+app.resizable(False, False)
 
 
+main = ctk.CTkFrame(
+    app,
+    corner_radius=20
+)
 
-InputFornecedor = ctk.CTkEntry(app,placeholder_text="Digite o fornecedor")
-InputNF = ctk.CTkEntry(app,placeholder_text="Digite o número da NF")
-InputValor = ctk.CTkEntry(app,placeholder_text="Digite o valor")
-InputFornecedor.pack()
-InputNF.pack()
-InputValor.pack()
+main.pack(
+    padx=40,
+    pady=40,
+    fill="both",
+    expand=True
+)
 
-button = ctk.CTkButton(app, text="Enviar", fg_color="red", text_color='green', command=button_callback)
-button.pack()
+
+titulo = ctk.CTkLabel(
+    main,
+    text="Lançamento de Nota Fiscal",
+    font=ctk.CTkFont(
+        size=28,
+        weight="bold"
+    )
+)
+
+titulo.pack(
+    padx=40,
+    pady=(35, 5),
+    anchor="w"
+)
+
+
+subtitulo = ctk.CTkLabel(
+    main,
+    text="Preencha os dados da nota fiscal abaixo",
+    font=ctk.CTkFont(size=14),
+    text_color="gray"
+)
+
+subtitulo.pack(
+    padx=40,
+    pady=(0, 30),
+    anchor="w"
+)
+
+
+form = ctk.CTkFrame(
+    main,
+    fg_color="transparent"
+)
+
+form.pack(
+    padx=40,
+    fill="x"
+)
+
+
+# Validações do Tkinter
+vcmd_texto = (app.register(apenas_texto), "%P")
+vcmd_numero = (app.register(apenas_numero), "%P")
+vcmd_valor = (app.register(validar_valor), "%P")
+
+
+# FORNECEDOR
+
+label_fornecedor = ctk.CTkLabel(
+    form,
+    text="Fornecedor",
+    font=ctk.CTkFont(
+        size=13,
+        weight="bold"
+    )
+)
+
+label_fornecedor.grid(
+    row=0,
+    column=0,
+    sticky="w",
+    padx=(0, 15),
+    pady=(0, 8)
+)
+
+
+InputFornecedor = ctk.CTkEntry(
+    form,
+    placeholder_text="Digite o fornecedor",
+    height=45,
+    corner_radius=10,
+    validate="key",
+    validatecommand=vcmd_texto
+)
+
+InputFornecedor.grid(
+    row=1,
+    column=0,
+    sticky="ew",
+    padx=(0, 15),
+    pady=(0, 25)
+)
+
+
+# NF
+
+label_nf = ctk.CTkLabel(
+    form,
+    text="Número da NF",
+    font=ctk.CTkFont(
+        size=13,
+        weight="bold"
+    )
+)
+
+label_nf.grid(
+    row=0,
+    column=1,
+    sticky="w",
+    pady=(0, 8)
+)
+
+
+InputNF = ctk.CTkEntry(
+    form,
+    placeholder_text="Digite o número da NF",
+    height=45,
+    corner_radius=10,
+    validate="key",
+    validatecommand=vcmd_numero
+)
+
+InputNF.grid(
+    row=1,
+    column=1,
+    sticky="ew",
+    pady=(0, 25)
+)
+
+
+# VALOR
+
+label_valor = ctk.CTkLabel(
+    form,
+    text="Valor da NF",
+    font=ctk.CTkFont(
+        size=13,
+        weight="bold"
+    )
+)
+
+label_valor.grid(
+    row=2,
+    column=0,
+    sticky="w",
+    padx=(0, 15),
+    pady=(0, 8)
+)
+
+
+InputValor = ctk.CTkEntry(
+    form,
+    placeholder_text="R$ 0,00",
+    height=45,
+    corner_radius=10,
+    validate="key",
+    validatecommand=vcmd_valor
+)
+
+InputValor.grid(
+    row=3,
+    column=0,
+    sticky="ew",
+    padx=(0, 15)
+)
+
+
+form.grid_columnconfigure(0, weight=1)
+form.grid_columnconfigure(1, weight=1)
+
+
+separador = ctk.CTkFrame(
+    main,
+    height=1,
+    fg_color="gray30"
+)
+
+separador.pack(
+    padx=40,
+    pady=30,
+    fill="x"
+)
+
+
+button = ctk.CTkButton(
+    main,
+    text="Cadastrar Nota Fiscal",
+    height=48,
+    corner_radius=10,
+    font=ctk.CTkFont(
+        size=14,
+        weight="bold"
+    ),
+    command=Button
+)
+
+button.pack(
+    padx=40,
+    pady=(0, 35),
+    fill="x"
+)
+
 
 app.mainloop()
