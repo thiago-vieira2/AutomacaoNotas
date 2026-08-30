@@ -31,7 +31,7 @@ def validar_valor(valor):
 
 
 def Button():
-    fornecedor = InputFornecedor.get()
+    fornecedor = InputFornecedor.get().upper()
     nf = InputNF.get()
     valor = InputValor.get()
     pedido = InputPedido.get()
