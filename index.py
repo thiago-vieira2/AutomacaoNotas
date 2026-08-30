@@ -1,4 +1,6 @@
+
 import customtkinter as ctk
+import Excel
 
 
 def apenas_texto(valor):
@@ -32,20 +34,31 @@ def Button():
     fornecedor = InputFornecedor.get()
     nf = InputNF.get()
     valor = InputValor.get()
+    pedido = InputPedido.get()
 
     print("Fornecedor:", fornecedor)
     print("NF:", nf)
     print("Valor:", valor)
 
+    Excel.AdicionarValores(nf, pedido, fornecedor, valor)
+
+
+# =========================
+# CONFIGURAÇÃO
+# =========================
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
-app.geometry("900x600")
+app.geometry("900x650")
 app.title("Controle de Notas Fiscais")
 app.resizable(False, False)
 
+
+# =========================
+# CONTAINER PRINCIPAL
+# =========================
 
 main = ctk.CTkFrame(
     app,
@@ -59,6 +72,10 @@ main.pack(
     expand=True
 )
 
+
+# =========================
+# CABEÇALHO
+# =========================
 
 titulo = ctk.CTkLabel(
     main,
@@ -90,6 +107,10 @@ subtitulo.pack(
 )
 
 
+# =========================
+# ÁREA DOS CAMPOS
+# =========================
+
 form = ctk.CTkFrame(
     main,
     fg_color="transparent"
@@ -101,13 +122,29 @@ form.pack(
 )
 
 
-# Validações do Tkinter
-vcmd_texto = (app.register(apenas_texto), "%P")
-vcmd_numero = (app.register(apenas_numero), "%P")
-vcmd_valor = (app.register(validar_valor), "%P")
+# =========================
+# VALIDAÇÕES
+# =========================
+
+vcmd_texto = (
+    app.register(apenas_texto),
+    "%P"
+)
+
+vcmd_numero = (
+    app.register(apenas_numero),
+    "%P"
+)
+
+vcmd_valor = (
+    app.register(validar_valor),
+    "%P"
+)
 
 
+# =========================
 # FORNECEDOR
+# =========================
 
 label_fornecedor = ctk.CTkLabel(
     form,
@@ -145,7 +182,9 @@ InputFornecedor.grid(
 )
 
 
-# NF
+# =========================
+# NÚMERO DA NF
+# =========================
 
 label_nf = ctk.CTkLabel(
     form,
@@ -181,7 +220,9 @@ InputNF.grid(
 )
 
 
+# =========================
 # VALOR
+# =========================
 
 label_valor = ctk.CTkLabel(
     form,
@@ -214,13 +255,67 @@ InputValor.grid(
     row=3,
     column=0,
     sticky="ew",
-    padx=(0, 15)
+    padx=(0, 15),
+    pady=(0, 25)
 )
 
 
-form.grid_columnconfigure(0, weight=1)
-form.grid_columnconfigure(1, weight=1)
+# =========================
+# PEDIDO
+# =========================
 
+label_pedido = ctk.CTkLabel(
+    form,
+    text="Número do Pedido",
+    font=ctk.CTkFont(
+        size=13,
+        weight="bold"
+    )
+)
+
+label_pedido.grid(
+    row=2,
+    column=1,
+    sticky="w",
+    pady=(0, 8)
+)
+
+
+InputPedido = ctk.CTkEntry(
+    form,
+    placeholder_text="Digite o número do pedido",
+    height=45,
+    corner_radius=10,
+    validate="key",
+    validatecommand=vcmd_numero
+)
+
+InputPedido.grid(
+    row=3,
+    column=1,
+    sticky="ew",
+    pady=(0, 25)
+)
+
+
+# =========================
+# CONFIGURAÇÃO DAS COLUNAS
+# =========================
+
+form.grid_columnconfigure(
+    0,
+    weight=1
+)
+
+form.grid_columnconfigure(
+    1,
+    weight=1
+)
+
+
+# =========================
+# SEPARADOR
+# =========================
 
 separador = ctk.CTkFrame(
     main,
@@ -230,10 +325,14 @@ separador = ctk.CTkFrame(
 
 separador.pack(
     padx=40,
-    pady=30,
+    pady=5,
     fill="x"
 )
 
+
+# =========================
+# BOTÃO
+# =========================
 
 button = ctk.CTkButton(
     main,
@@ -249,7 +348,7 @@ button = ctk.CTkButton(
 
 button.pack(
     padx=40,
-    pady=(0, 35),
+    pady=(25, 35),
     fill="x"
 )
 
